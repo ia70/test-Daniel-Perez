@@ -34,7 +34,7 @@ app.use(function (req, res) {
 });
 
 // Starting the server -------------------------------------------
-//Configurar datos del servidor y base de datos en el archivo:  "src/lib/Others/database_module.js"
+//Configurar datos del servidor y base de datos en el archivo:  "src/lib/Others/database_module.js" ***************************************************
 app.listen(app.get('port'), () => {
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     console.log("\nFECHA: " + regional.getDateTime() + '\n');
