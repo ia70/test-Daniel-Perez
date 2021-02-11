@@ -19,6 +19,7 @@ app.use(express.json());
 
 // Routes --------------------------------------------------------                            
 app.use('/api', require('./routes/index.routes'));
+app.use('/api/login', require('./routes/login.routes'));
 
 
 // Static files --------------------------------------------------
@@ -26,7 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Control de errores
 app.use(function (req, res) {
-    res.redirect(301, '../');
+    res.status(400).send({
+        "error":"¡Ruta no válida!"
+    });
 });
 
 // Global variables ----------------------------------------------
