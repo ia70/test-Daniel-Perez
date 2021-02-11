@@ -43,7 +43,7 @@ async function session_check(hash, req_permission, header) {
             data = await pool.query('CALL PERMISSION_CHECK(?,?)', [session.user_id, req_permission]);
             permission = data[0][0];
             if (permission === undefined) {
-                res.msg = "¡Sin permission para acceder a esta información!"
+                res.msg = "¡Sin permiso para acceder a esta información!"
                 return res;
             }
         }
