@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
 
     // Se crea JSON vacio en caso de error de logueo.
     let sesion = {
-        'name': null,
+        'name': "¡Datos incorrectos!",
         'hash': null
     };
 
