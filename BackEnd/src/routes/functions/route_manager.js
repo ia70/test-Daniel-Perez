@@ -48,6 +48,7 @@ async function route_manager(req) {
                 break;
         }
 
+        delete res.user_id;
         // Ejecución de consulta
         res.data = await pool.query(sql, [data]);
         return res;
