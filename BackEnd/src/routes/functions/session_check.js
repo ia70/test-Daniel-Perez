@@ -8,7 +8,8 @@ const table = "session";
 async function session_check(hash, req_permission, header) {
     let res = {
         "access": false,
-        "msg": ""
+        "msg": "",
+        "data" : []
     };
 
     // Definición de variables
@@ -29,15 +30,16 @@ async function session_check(hash, req_permission, header) {
             return res;
         }
 
-        // Verificar que hash.cliente sea = a header
-        if (session.cliente != header) {
+        // Verificar que hash.cliente sea = a header. De lo contrario significa que se está accediendo desde una aplicación distinta
+        // a la aplicación donde se registró el inicio de sesión. (Igual se puede comparar con dirección IP)
+        if (session.client != header) {
             res.msg = "¡Acceso no identificado!";
             close_session(hash);
             return res;
         }
 
         // Verificar permiso
-        if (red_permission != null || req_permission != "") {
+        if (req_permission != null || req_permission != "") {
             data = await pool.query('CALL PERMISSION_CHECK(?,?)', [session.user_id, req_permission]);
             permission = data[0][0];
             if (permission === undefined) {
@@ -46,10 +48,12 @@ async function session_check(hash, req_permission, header) {
             }
         }
 
+        //Devuelve respuesta satisfactoria.
         res.access = true;
 
         // Actualiza la sesión si todo lo anterior es correcto
         update_session(hash);
+        res.user_id = session.user_id;
         return res;
     } catch (error) {
         res.msg = error;
