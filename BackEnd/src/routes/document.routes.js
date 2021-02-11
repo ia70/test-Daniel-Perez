@@ -1,4 +1,5 @@
 'use strict';
+const { Console } = require('console');
 const express = require('express');
 const router = express.Router();
 
@@ -12,7 +13,7 @@ const table = "document";
 
 // ____________________________
 //->>>>>    LISTA     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-router.post('/list' || '/getmydocument', async (req, res) => {
+router.post('/list', async (req, res) => {
     let req_permiso = table + "_list";
     //Se obtiene hash
     let hash = req.body.hash || "";
@@ -23,9 +24,9 @@ router.post('/list' || '/getmydocument', async (req, res) => {
     let value = req.body.value || data[field] || "";
     // Variable donde se guarda la consulta SQL
     let sql = "";
-
+    info.x("ENTRO --------------");
     let access = await session.session_check(hash, req_permiso, req.headers['user-agent']);
-    
+
     if (access.access == false) {
         delete access.user_id;
         res.status(400).send(access);
@@ -81,7 +82,7 @@ router.post('/query', async (req, res) => {
         access.data = pool.query(sql);
         delete access.user_id;
         //Devuelve respuesta al cliente
-        res.status(200).send(access );
+        res.status(200).send(access);
     } catch (e) {
         delete access.user_id;
         //Devuel error
@@ -227,6 +228,68 @@ router.post('/del', async (req, res) => {
         res.status(400).send(e);
     }
 });
+
+
+//______________________________
+//->>>>>    SHARE     <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+router.post('/share', async (req, res) => {
+    let req_permiso = table + "_share";
+    //Se obtiene hash
+    let hash = req.body.hash || "";
+    // Variable donde se guardará resultado de consulta SQL
+    let data = req.body.data || "";
+    // Variable donde se guarda la consulta SQL
+    let sql = "";
+
+    let access = await session.session_check(hash, req_permiso, req.headers['user-agent']);
+    if (access.access == false) {
+        delete access.user_id;
+        res.status(400).send(access);
+        return;
+    }
+
+    // == SENTERNCIAS SI SESION VALIDA ====================================================
+
+    try {
+        //Verifica que el usuario que va a compartir tenga acceso al documento que quiere compartir
+        sql = "SELECT * FROM user_document ud WHERE ud.user_id='" + access.user_id + "' AND ud.document_id=" + data.document_id;
+        let tem = await pool.query(sql);
+        if (tem[0] == undefined) {
+            delete access.user_id;
+            access.msg = "¡No tienes acceso al documento a compartir!";
+            res.status(400).send(access);
+            return;
+        }
+
+        //Se crea sentencia SQL
+        sql = 'INSERT INTO user_document VALUES(default, "' + data.user_id + '", ' + data.document_id + ')';
+        delete data.user_document_id;
+        info.x(data);
+
+        //Ejecuta la petición
+        try {
+            access.data = await pool.query(sql);
+        } catch (error) { }
+
+        try {
+            //Obtiene ID del registro insertado
+            let id = data.document_id;
+
+            //Genera historial del documento
+            setHistory(access.user_id, id, "share");
+        } catch (error) {
+            info.x(error);
+        }
+        delete access.user_id;
+        //Devuelve respuesta al cliente
+        res.status(200).send(access);
+    } catch (e) {
+        delete access.user_id;
+        //Devuel error
+        res.status(400).send(e);
+    }
+});
+
 
 //Función para generar historial de documento
 async function setHistory(user, document, action) {
