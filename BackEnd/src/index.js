@@ -20,7 +20,7 @@ app.use(express.json());
 // Routes --------------------------------------------------------                            
 app.use('/api/login',       require('./routes/login.routes'));
 app.use('/api/document',    require('./routes/document.routes'));
-//app.use('/api/',            require('./routes/catalog.routes'));
+app.use('/api/',            require('./routes/catalog.routes'));
 
 
 // Static files --------------------------------------------------
