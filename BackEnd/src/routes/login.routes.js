@@ -12,8 +12,8 @@ const regional = require('../lib/Utils/regional');
 //->>>>>    LOGIN         ------------------------------------------------------------------
 router.post('/', async (req, res) => {
 
-    let usr = req.body.usr;
-    let pwd = req.body.pwd;
+    let usr = req.body.user;
+    let pwd = req.body.password;
 
     // Se crea JSON vacio en caso de error de logueo.
     let sesion = {
