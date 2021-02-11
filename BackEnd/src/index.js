@@ -18,8 +18,9 @@ app.use(express.urlencoded());
 app.use(express.json());
 
 // Routes --------------------------------------------------------                            
-app.use('/api', require('./routes/index.routes'));
-app.use('/api/login', require('./routes/login.routes'));
+app.use('/api',         require('./routes/index.routes'));
+app.use('/api/login',   require('./routes/login.routes'));
+app.use('/api/',        require('./routes/catalog.routes'));
 
 
 // Static files --------------------------------------------------
