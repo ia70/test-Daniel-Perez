@@ -3,13 +3,18 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    console.log(req.headers['user-agent'], "\n");
-    console.log(req._remoteAddress);
+    try {
+        console.log(req.headers['user-agent'], "\n");
+        console.log(req._remoteAddress);
 
-    res.json({
-        info: 'API test-Daniel-Perez',
-        ip: req._remoteAddress
-    });
+        res.json({
+            info: 'API test-Daniel-Perez',
+            ip: req._remoteAddress
+        });
+    } catch (error) {
+        console.log(error);
+    }
+
 });
 
 module.exports = router;
