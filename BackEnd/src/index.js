@@ -18,9 +18,9 @@ app.use(express.urlencoded());
 app.use(express.json());
 
 // Routes --------------------------------------------------------                            
-app.use('/api',         require('./routes/index.routes'));
-app.use('/api/login',   require('./routes/login.routes'));
-app.use('/api/',        require('./routes/catalog.routes'));
+app.use('/api/login',       require('./routes/login.routes'));
+app.use('/api/document',    require('./routes/document.routes'));
+//app.use('/api/',            require('./routes/catalog.routes'));
 
 
 // Static files --------------------------------------------------
@@ -33,10 +33,8 @@ app.use(function (req, res) {
     });
 });
 
-// Global variables ----------------------------------------------
-
-
 // Starting the server -------------------------------------------
+//Configurar datos del servidor y base de datos en el archivo:  "src/lib/Others/database_module.js"
 app.listen(app.get('port'), () => {
     console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
     console.log("\nFECHA: " + regional.getDateTime() + '\n');
