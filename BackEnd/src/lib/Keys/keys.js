@@ -1,11 +1,11 @@
 'use strict';
 module.exports = {
     server: {
-        host: '192.168.100.200',   
+        host: '192.168.100.101',   
         port: 80
     },
     database: {     //MySQL
-        host: '192.168.100.200',   
+        host: '127.0.0.1',   
         port: 3306,
         user: 'root',
         password: '',
